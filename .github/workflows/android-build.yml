@@ -1,4 +1,4 @@
-name: Build LANDLORD LIFE Android
+namBuild LANDLORD LIFE Android
 
 on:
   push:
@@ -46,3 +46,4 @@ jobs:
         with:
           name: LANDLORD-LIFE-AAB
           path: source/LandlordLife_Release/android/app/build/outputs/bundle/release/app-release.aab
+          e: 
