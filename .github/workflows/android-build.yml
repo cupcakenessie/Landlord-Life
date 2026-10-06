@@ -1,0 +1,48 @@
+name: Build LANDLORD LIFE Android
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get project
+        uses: actions/checkout@v4
+
+      - name: Extract LANDLORD LIFE project
+        run: |
+          unzip -o Landlord_Life_Android13_Minimum.zip -d source
+          echo "Project extracted"
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android 36
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+
+      - name: Build Android App Bundle
+        working-directory: source/LandlordLife_Release/android
+        run: gradle bundleRelease --no-daemon
+
+      - name: Upload Android App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: LANDLORD-LIFE-AAB
+          path: source/LandlordLife_Release/android/app/build/outputs/bundle/release/app-release.aab
